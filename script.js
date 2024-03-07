@@ -1,11 +1,13 @@
 
-let dollarRate = [140, 180, 240, 160, 280,];
+let dollarRate = [160, 180, 240, 160, 280]
 
 generateBar()
 generateBarDetails()
 
 function generateBar() {
     let barContainer = document.getElementById('bars');
+
+    let maxBarHeight = barContainer.offsetHeight - 10;
 
     for (let rate of dollarRate) {
 
@@ -14,15 +16,10 @@ function generateBar() {
         let height;
 
         if (rate == max) {
-            height = 280;
-        } else if (rate == 0) {
-            height = 5
-        } else if (rate < 101) {
-            height = 280 - (210 - Math.floor(rate * 100 / 280))
-        } else if (rate < 151) {
-            height = 280 - (175 - Math.floor(rate * 100 / 280))
+            height = maxBarHeight;
         } else {
-            height = 280 - (130 - Math.floor(rate * 100 / 280))
+            let rateP = rate * 100 / max;
+            height = rateP * maxBarHeight / 100;
         }
 
         barContainer.innerHTML += `
@@ -55,3 +52,30 @@ function diffColor() {
 
     return colors[Math.floor(Math.random() * colors.length)]
 }
+
+let increment = document.getElementById('incre');
+let decrement = document.getElementById('decre');
+
+increment.addEventListener('click', () => {
+    dollarRate.push(Math.floor(Math.random() * Math.max(...dollarRate)));
+    let barContainer = document.getElementById('bars');
+    let barDetails = document.getElementById('bar-details');
+
+    barContainer.innerHTML = ''
+    barDetails.innerHTML = ''
+
+    generateBar()
+    generateBarDetails()
+})
+
+decrement.addEventListener('click', () => {
+    dollarRate.pop();
+    let barContainer = document.getElementById('bars');
+    let barDetails = document.getElementById('bar-details');
+
+    barContainer.innerHTML = ''
+    barDetails.innerHTML = ''
+
+    generateBar()
+    generateBarDetails()
+})
