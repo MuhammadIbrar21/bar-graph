@@ -57,7 +57,14 @@ let increment = document.getElementById('incre');
 let decrement = document.getElementById('decre');
 
 increment.addEventListener('click', () => {
-    dollarRate.push(Math.floor(Math.random() * Math.max(...dollarRate)));
+    if (dollarRate.length < 24) {
+        dollarRate.push(Math.floor(Math.random() * Math.max(...dollarRate)));
+    }
+    if (dollarRate.length == 23) {
+        increment.disabled = true;
+    } else if (dollarRate.length > 1) {
+        decrement.disabled = false;
+    }
     let barContainer = document.getElementById('bars');
     let barDetails = document.getElementById('bar-details');
 
@@ -69,7 +76,13 @@ increment.addEventListener('click', () => {
 })
 
 decrement.addEventListener('click', () => {
-    dollarRate.pop();
+    if (dollarRate.length > 1) {
+        dollarRate.pop();
+        increment.disabled = false;
+    }
+    if (dollarRate.length == 1) {
+        decrement.disabled = true;
+    }
     let barContainer = document.getElementById('bars');
     let barDetails = document.getElementById('bar-details');
 
