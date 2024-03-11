@@ -54,13 +54,11 @@ function generateBarDetails() {
 
     let max = maximium(dollarRate);
 
-    let divider = Math.round(max / 7);
-    let j = 6;
-    for (let i = 0; i < 7; i++) {
+    let divider = Math.round(max / 6);
+    let j = 5;
+    scaleValue.innerHTML = `<div>0</div>`
+    for (let i = 0; i < 6; i++) {
         let iterated = Math.round(max - divider * j)
-        if (i == 0) {
-            iterated = iterated * 0;
-        }
         scaleValue.innerHTML += `
             <div>${iterated}</div>
       `
