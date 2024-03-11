@@ -1,3 +1,7 @@
+let increment = document.getElementById('incre');
+let decrement = document.getElementById('decre');
+let addDetailBtn = document.getElementById('add-detail-btn');
+
 
 let dollarRate = [
     { currencyRate: 160, month: "jan" },
@@ -50,22 +54,17 @@ function generateBarDetails() {
 
     let max = maximium(dollarRate);
 
-    let iterated;
-    let totalScale;
-    if (max <= 300) {
-        iterated = 50;
-        totalScale = 7;
-    } else if (max > 300 && max <= 400) {
-        iterated = 60;
-        totalScale = 8;
-    } else if (max > 400 && max <= 500) {
-        iterated = 75;
-        totalScale = 8;
-    }
-    for (let i = 0; i < totalScale; i++) {
+    let divider = Math.round(max / 7);
+    let j = 6;
+    for (let i = 0; i < 7; i++) {
+        let iterated = Math.round(max - divider * j)
+        if (i == 0) {
+            iterated = iterated * 0;
+        }
         scaleValue.innerHTML += `
-            <div>${i * iterated}</div>
+            <div>${iterated}</div>
       `
+        j--;
     }
 
     dollarRate.sort((n, p) => {
@@ -87,9 +86,9 @@ function diffColor() {
 
 function maximium(arr) {
     let maxValue = Number.MIN_VALUE;
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i].currencyRate > maxValue) {
-            maxValue = arr[i].currencyRate;
+    for (let rate of arr) {
+        if (rate.currencyRate > maxValue) {
+            maxValue = rate.currencyRate;
         }
     }
     return maxValue;
@@ -100,8 +99,45 @@ function randomMonth() {
     return monthList[Math.floor(Math.random() * monthList.length)];
 };
 
-let increment = document.getElementById('incre');
-let decrement = document.getElementById('decre');
+addDetailBtn.addEventListener('click', () => {
+    let price = document.getElementById('price');
+    let month = document.getElementById('month');
+
+    if (price.value == 0 && month.value == '') {
+        price.style.borderColor = 'red'
+        month.style.borderColor = 'red'
+        return
+    } else if (price.value == 0) {
+        price.style.borderColor = 'red'
+        return
+    } else if (month.value == '') {
+        month.style.borderColor = 'red'
+        return
+    } else {
+        price.style.borderColor = ''
+        month.style.borderColor = ''
+    }
+
+
+    let newPrice = {
+        currencyRate: price.value,
+        month: month.value
+    }
+
+    dollarRate.push(newPrice);
+
+    let barContainer = document.getElementById('bars');
+    let barDetails = document.getElementById('bar-details');
+    let scaleValue = document.getElementById('left-scale');
+
+    barContainer.innerHTML = ''
+    barDetails.innerHTML = ''
+    scaleValue.innerHTML = ''
+
+    generateBar()
+    generateBarDetails()
+
+})
 
 increment.addEventListener('click', () => {
     let max = maximium(dollarRate);
